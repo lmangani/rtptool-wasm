@@ -10,6 +10,13 @@ Extract RTP and Decrypt SRTP Audio streams from .PCAP files
 ### Status
 * Unstable, Broken, Experimental
 
+### Build
+###### x86_64
+`./build.sh` 
+
+###### WASM
+`./docker-build.sh`
+
 ### Usage
 Analyze the PCAP for streams
 ```
