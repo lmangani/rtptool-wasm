@@ -27,11 +27,12 @@ Extract RTP streams by ssrc prefixed by `0x`
 ./dist/rtptool extract <ssrc> <input file>
 ```
 
-Decrypt SRTP streams by ssrc using the RFC4568 key extracted from SIP (`AES_CM_128_HMAC_SHA1_80 inline:fCaLYx1IEhD62eKqFIGOk1qykNikYcamkFVkde1b|2^31|1:1`)
+Decrypt SRTP streams by ssrc using the RFC4568 key
 
 ```
 ./dist/rtptool decrypt <ssrc> <key> <input file>
 ```
+Example Key: `AES_CM_128_HMAC_SHA1_80 inline:fCaLYx1IEhD62eKqFIGOk1qykNikYcamkFVkde1b|2^31|1:1`
 
 
 ### Credits
