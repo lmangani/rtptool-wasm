@@ -15,7 +15,8 @@ ARGS=(
   -O3
   -s WASM=1
   -s ERROR_ON_UNDEFINED_SYMBOLS=0
+  -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap"]' 
   -I. -I../libpcap-1.9.1
-  -o ../wasm/dist/rtptool.js aes.c analyze.c base64.c decrypt.c extract.c file.c hex.c srtpdecrypt.c usage-and-help.c
+  -o ../wasm/dist/rtptool.js aes.c analyze.c base64.c decrypt.c extract.c file.c hex.c srtpdecryptwasm.c usage-and-help.c
 )
 emcc "${ARGS[@]}"
