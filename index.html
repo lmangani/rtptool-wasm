@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>rtptool.wasm</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <h2>RTPTOOL.WASM</h2>
+    <audio id="output-audio" controls></audio><br />
+    <br />
+    <input
+      type="button"
+      id="loadFilePcap"
+      value="Load PCAP"
+      onclick="document.getElementById('pcap').click();"
+    />
+    <input type="file" style="display:none;" id="pcap" name="pcap" />
+    <br />
+    <select id="ssrcs" hidden>
+      <option value="" selected="selected"></option>
+    </select>
+    <p id="message" />
+    <script src="./wasm/dist/rtptool.js"></script>
+    <script src="./wasm/dist/script.js"></script>
+  </body>
+</html>
