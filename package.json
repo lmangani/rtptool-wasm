@@ -1,6 +1,6 @@
 {
   "name": "rtptool-wasm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "PCAP RTP Payload extraction using WASM Libpcap",
   "main": "wasm/dist/rtptool.js",
   "files": [
@@ -15,9 +15,13 @@
   },
   "keywords": [
     "rtp",
+    "srtp",
     "wasm",
     "libpcap",
     "pcap",
+    "wav",
+    "codec",
+    "hep",
     "node"
   ],
   "author": "lorenzo.mangani@gmail.com",

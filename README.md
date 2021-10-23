@@ -28,7 +28,7 @@ npm run test
 ##### Functions
 - [x] analyze_pcap
 - [x] extract_pcap
-- [ ] decrypt_pcap
+- [x] decrypt_pcap
 
 ##### API
 ```javascript
@@ -36,6 +36,7 @@ const api = {
   version: Module.cwrap('version', 'string', []), // null
   analyze: Module.cwrap('analyze_pcap', 'string', ['string']), // filename
   extract: Module.cwrap('extract_pcap', 'string', ['string', 'string']), // ssrc, filename
+  extract: Module.cwrap('decrypt_pcap', 'string', ['string', 'string', 'string']), // ssrc, key, filename
 };
 ```
 

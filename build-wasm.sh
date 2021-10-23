@@ -34,6 +34,6 @@ ARGS=(
   -fno-rtti -fno-exceptions
   -I. -I../libpcap-1.9.1
   -L../libpcap-1.9.1
-  -o ../wasm/dist/rtptool.js aes.c analyze.c base64.c extract.c file.c hex.c srtpdecryptwasm.c usage-and-help.c -lpcap
+  -o ../wasm/dist/rtptool.js aes.c analyze.c base64.c extract.c file.c hex.c decrypt.c srtpdecryptwasm.c usage-and-help.c -lpcap
 )
 emcc "${ARGS[@]}"
