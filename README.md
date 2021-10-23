@@ -24,6 +24,7 @@ npm run test
 Check out the included [example](wasm/dist/api.js) for API usage
 - [x] analyze_pcap
 - [x] extract_pcap
+- [ ] decrypt_pcap
 
 ### Command-Line Usage
 ```
