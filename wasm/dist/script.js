@@ -74,7 +74,7 @@ const extract_pcap = async ({ target: { files } }) => {
       audio.addEventListener("ended", function(e){
         message.innerHTML = "";
       }, false);
-      message.innerHTML = cache[ssrc];
+      message.innerHTML = JSON.stringify(cache[ssrc]);
     } catch (e) {
       console.log(e);
     }
