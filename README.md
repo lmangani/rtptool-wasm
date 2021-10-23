@@ -15,16 +15,29 @@ Extract RTP and Decrypt SRTP Audio streams from .PCAP files in the browser using
 
 ###### WASM using Docker
 `./build-wasm-docker.sh`
-```
-npm run test
-```
+
 
 -------------------
 ### WASM Module Usage
 Check out the included [example](wasm/dist/api.js) for API usage
+
+```
+npm run test
+```
+
+##### Functions
 - [x] analyze_pcap
 - [x] extract_pcap
 - [ ] decrypt_pcap
+
+##### API
+```javascript
+const api = {
+  version: Module.cwrap('version', 'string', []), // null
+  analyze: Module.cwrap('analyze_pcap', 'string', ['string']), // filename
+  extract: Module.cwrap('extract_pcap', 'string', ['string', 'string']), // ssrc, filename
+};
+```
 
 ### Command-Line Usage
 ```
