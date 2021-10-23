@@ -69,7 +69,11 @@ const extract_pcap = async ({ target: { files } }) => {
       message.innerHtml = "Completed";
       const audio = document.getElementById("output-audio");
       audio.src = wavUrl;
-      message.innerHTML = "Ready";
+      audio.play();
+      my.addEventListener("ended", function(e){
+        message.innerHTML = "";
+      }, false);
+      message.innerHTML = "Playing "+ssrc;
     } catch (e) {
       console.log(e);
     }
