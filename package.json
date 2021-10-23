@@ -1,8 +1,11 @@
 {
   "name": "rtptool-wasm",
   "version": "1.0.0",
-  "description": "RTP Payload extraction using WASM Libpcap",
-  "main": "index.js",
+  "description": "PCAP RTP Payload extraction using WASM Libpcap",
+  "main": "wasm/dist/rtptool.js",
+  "files": [
+    "wasm/dist/*"
+  ],
   "scripts": {
     "test": "node wasm/dist/api.js"
   },
