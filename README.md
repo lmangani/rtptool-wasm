@@ -36,7 +36,7 @@ const api = {
   version: Module.cwrap('version', 'string', []), // null
   analyze: Module.cwrap('analyze_pcap', 'string', ['string']), // filename
   extract: Module.cwrap('extract_pcap', 'string', ['string', 'string']), // ssrc, filename
-  extract: Module.cwrap('decrypt_pcap', 'string', ['string', 'string', 'string']), // ssrc, key, filename
+  decrypt: Module.cwrap('decrypt_pcap', 'string', ['string', 'string', 'string']), // ssrc, key, filename
 };
 ```
 
