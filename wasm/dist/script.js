@@ -1,4 +1,4 @@
-onst message = document.getElementById("message");
+const message = document.getElementById("message");
 
 var rtptool, api;
 
