@@ -28,6 +28,7 @@ ARGS=(
   -s FORCE_FILESYSTEM=1
   -s ASSERTIONS=1
   -s FETCH=1
+  -s EXIT_RUNTIME=1
   -s ALLOW_MEMORY_GROWTH=1
   -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap", "FS"]'
   -fno-rtti -fno-exceptions

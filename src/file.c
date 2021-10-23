@@ -11,10 +11,13 @@ void write_memory_to_file( char *filename, char *binary_data, int buffer_length 
 
   if ( ( outfile = fopen( filename, "wb" ) ) == NULL )
   {
-    perror( "\n\nUnable to open file for writing\n" );
+    printf("FILE OUT: %s\n", filename);
+    perror( "\n\nUnable to open file for writing: %s\n");
     return;
+  } else {
+    printf("FILE OUT: %s\n", filename);
   }
- 
+
   bytes_written = fwrite( ( void * ) binary_data, 1, buffer_length, outfile );
 
   fclose( outfile );
