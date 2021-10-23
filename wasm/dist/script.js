@@ -65,12 +65,11 @@ const extract_pcap = async ({ target: { files } }) => {
           { type: "audio/wav" }
         )
       );
-      console.log("wav", wavUrl, content);
       message.innerHtml = "Completed";
       const audio = document.getElementById("output-audio");
       audio.src = wavUrl;
       audio.play();
-      my.addEventListener("ended", function(e){
+      audio.addEventListener("ended", function(e){
         message.innerHTML = "";
       }, false);
       message.innerHTML = "Playing "+ssrc;
