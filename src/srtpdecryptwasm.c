@@ -41,9 +41,7 @@ EMSCRIPTEN_KEEPALIVE
 int analyze_pcap(const char *filename) {
   MAIN_THREAD_EM_ASM({
      var filename = UTF8ToString($0);
-     console.log('trying to analyze '+filename);
      var read = FS.readFile(filename, { encoding: 'utf8' });
-     console.log('read', read.length);
   }, filename);
   int r;
   r = analyze( filename );
@@ -55,28 +53,17 @@ int extract_pcap(const char *ssrc, const char *filename) {
   MAIN_THREAD_EM_ASM({
      var filename = UTF8ToString($1);
      var ssrc = UTF8ToString($0);
-     console.log('trying to extract '+filename);
      var read = FS.readFile(filename, { encoding: 'utf8' });
-     console.log('read', read.length);
   }, ssrc, filename);
   int r;
   r = extract( ssrc, filename );
   MAIN_THREAD_EM_ASM({
      var filename = UTF8ToString($0)+".wav";
      var ssrc = UTF8ToString($0);
-     console.log('trying to read back '+filename);
      var read = FS.readFile(filename, { encoding: 'utf8' });
-     console.log('read wav', read.length);
   }, ssrc, filename);
 
   return r;
-/*
-  MAIN_THREAD_EM_ASM({
-     var filename = 'rtp.raw';
-     console.log('trying to save '+filename);
-     var write = FS.writeFile(filename, r);
-  }, filename);
-*/
 }
 
 /*

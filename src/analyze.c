@@ -8,7 +8,7 @@
  * This software is distributed without any warranty.
  *
  * You should have received a copy of the CC0 Public Domain Dedication along with this software.
- * If not, see <http://creativecommons.org/publicdomain/zero/1.0/>. 
+ * If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
  *
 */
 
@@ -20,9 +20,11 @@
 
 
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <pcap/pcap.h>
 #include "hex.h"
+#include "file.h"
 
 
 int analyze( const char *filename ) {
@@ -130,33 +132,42 @@ if( res == -1 ) {
 }
 
 if( RTP_Streams == 0 ) {
-	printf("\nNo RTP Streams found.\n");
+	printf(stderr, "\nNo RTP Streams found.\n");
 	return -1;
 }
 
 printf("\n");
+
+char* final = "[";
+
 Current_RTP_Stream = RTP_Streams;
 while ( !( Current_RTP_Stream == 0 ) ) {
 	if( Current_RTP_Stream->numberofpackets < 50 ) { /* ignore false positives and short lived RTP streams, 50 seems a reasoable threshold */
 		Current_RTP_Stream = Current_RTP_Stream->next;
 		continue;
 	}
-	printf("SSRC:\t\t%.2x%.2x%.2x%.2x\n", Current_RTP_Stream->ssrc[ 0 ], Current_RTP_Stream->ssrc[ 1 ], Current_RTP_Stream->ssrc[ 2 ], Current_RTP_Stream->ssrc[ 3 ]);
-	printf("Payload Type:\t%d", Current_RTP_Stream->pt[ 0 ]);
-	switch( (int)Current_RTP_Stream->pt[ 0 ] ) {
-		case 0: printf(" (PCMU)\n"); break;
-		case 8: printf(" (PCMA)\n"); break;
-		case 9: printf(" (G722)\n"); break;
-		case 103: printf(" (SILK/8000)\n"); break;
-		case 104: printf(" (SILK/16000)\n"); break;
-		default: printf("\n"); break;
-	}
-	printf("Src IP:\t\t%d.%d.%d.%d\n", Current_RTP_Stream->sip[ 0 ], Current_RTP_Stream->sip[ 1 ], Current_RTP_Stream->sip[ 2 ], Current_RTP_Stream->sip[ 3 ]);
-	printf("Src Port:\t%d\n", (((int)Current_RTP_Stream->sport[ 0 ]) << 8) + (int)Current_RTP_Stream->sport[ 1 ]);
-	printf("Dst IP:\t\t%d.%d.%d.%d\n", Current_RTP_Stream->dip[ 0 ], Current_RTP_Stream->dip[ 1 ], Current_RTP_Stream->dip[ 2 ], Current_RTP_Stream->dip[ 3 ]);
-	printf("Dst Port:\t%d\n", (((int)Current_RTP_Stream->dport[ 0 ]) << 8) + (int)Current_RTP_Stream->dport[ 1 ]);
-	printf("Packets:\t%d\n\n", Current_RTP_Stream->numberofpackets);
+	char* json;
+        asprintf(&json, "{'ssrc': '0x%.2x%.2x%.2x%.2x', 'pt': %d, 'source_ip': '%d.%d.%d.%d', 'source_port': %d, 'dest_ip': '%d.%d.%d.%d', 'dest_port': %d, 'packets': %d },",
+		Current_RTP_Stream->ssrc[ 0 ], Current_RTP_Stream->ssrc[ 1 ], Current_RTP_Stream->ssrc[ 2 ], Current_RTP_Stream->ssrc[ 3 ],
+		Current_RTP_Stream->pt[ 0 ],
+		Current_RTP_Stream->sip[ 0 ], Current_RTP_Stream->sip[ 1 ], Current_RTP_Stream->sip[ 2 ], Current_RTP_Stream->sip[ 3 ],
+		(((int)Current_RTP_Stream->sport[ 0 ]) << 8) + (int)Current_RTP_Stream->sport[ 1 ],
+		Current_RTP_Stream->dip[ 0 ], Current_RTP_Stream->dip[ 1 ], Current_RTP_Stream->dip[ 2 ], Current_RTP_Stream->dip[ 3 ],
+		(((int)Current_RTP_Stream->dport[ 0 ]) << 8) + (int)Current_RTP_Stream->dport[ 1 ],
+		Current_RTP_Stream->numberofpackets
+        );
+	asprintf(&final, "%s%s",final, json);
+	free(json);
+
 	Current_RTP_Stream = Current_RTP_Stream->next;
+}
+
+if (final != NULL)
+{
+    final[strlen(final) - 1] = '\0';
+    asprintf(&final, "%s]",final);
+    write_memory_to_file( "report.json", final, strlen(final) );
+    free(final);
 }
 
 return 0;

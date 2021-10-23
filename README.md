@@ -15,6 +15,11 @@ Extract RTP and Decrypt SRTP Audio streams from .PCAP files
 
 ###### WASM via Docker
 `./build-wasm-docker.sh`
+```
+npm run test
+```
+
+-------------------
 
 ### Usage
 Analyze the PCAP for streams

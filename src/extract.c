@@ -143,7 +143,9 @@ while( ( ( res = pcap_next_ex( fp, &header, &pkt_data ) ) >= 0 ) && !first_packe
 			memcpy( ( void * ) wav_file_content, ( void * ) silkbin_file_skeleton_header, wav_file_size );
 		}
 
-		printf( "*");
+		// COUNT FRAMES!!!
+		// printf( "*");
+
 		/* printf( "Frame %d: RTP Seq: %.2x%.2x RTP SSRC: %.2x%.2x%.2x%.2x decrypting...\n", frame_number, sequence_number[ 0 ], sequence_number[ 1 ], ssrc[ 0 ], ssrc[ 1 ], ssrc[ 2 ], ssrc[ 3 ] ); */
 
 		/* RTP Payload starts 12 bytes after RTP Offset and ends at header->caplen */
@@ -195,7 +197,9 @@ while((res = pcap_next_ex( fp, &header, &pkt_data)) >= 0)
 	/* and is RTP Payload Type identical to the RTP Payload Type we found in the first packet? */
 		 ( rtp_payload_type == rtp_pt_found ) )
 	{
-		printf( "*");
+		// PRINT PROGRESS!!!
+		// printf( "*");
+
 		/* printf( "Frame %d: RTP Seq: %.2x%.2x RTP SSRC: %.2x%.2x%.2x%.2x decrypting...\n", frame_number, sequence_number[ 0 ], sequence_number[ 1 ], ssrc[ 0 ], ssrc[ 1 ], ssrc[ 2 ], ssrc[ 3 ] ); */
 
 		/* RTP Payload starts 12 bytes after RTP Offset and ends at header->caplen */

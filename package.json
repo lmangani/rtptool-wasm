@@ -1,0 +1,27 @@
+{
+  "name": "rtptool-wasm",
+  "version": "1.0.0",
+  "description": "RTP Payload extraction using WASM Libpcap",
+  "main": "index.js",
+  "scripts": {
+    "test": "node wasm/dist/api.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lmangani/rtptool-wasm.git"
+  },
+  "keywords": [
+    "rtp",
+    "wasm",
+    "libpcap",
+    "pcap",
+    "node"
+  ],
+  "author": "lorenzo.mangani@gmail.com",
+  "license": "AGPLv3",
+  "bugs": {
+    "url": "https://github.com/lmangani/rtptool-wasm/issues"
+  },
+  "homepage": "https://github.com/lmangani/rtptool-wasm#readme",
+  "dependencies": {}
+}
