@@ -39,6 +39,12 @@ void version() {
 
 EMSCRIPTEN_KEEPALIVE
 int analyze_pcap(const char *filename) {
+  MAIN_THREAD_EM_ASM({
+     var filename = UTF8ToString($0);
+     console.log('trying to open '+filename);
+     var read = FS.readFile(filename, { encoding: 'utf8' });
+     console.log('read', read.length);
+  }, filename);
   int r;
   r = analyze( filename );
   return r;
@@ -68,6 +74,25 @@ uint8_t* create_buffer(int width, int height) {
 EMSCRIPTEN_KEEPALIVE
 void destroy_buffer(uint8_t* p) {
   free(p);
+}
+
+
+void emscripten_wget_data(const char* url, void** pbuffer, int* pnum, int *perror);
+
+
+int main() {
+  EM_ASM(
+        // Make a directory other than '/'
+        FS.mkdir('/pcap');
+        // Then mount with IDBFS type
+        FS.mount(MEMFS, {}, '/pcap');
+        FS.syncfs(true, function (err) {
+            // Error
+        });
+  );
+
+  emscripten_exit_with_live_runtime();
+  return 0;
 }
 
 

@@ -25,9 +25,12 @@ ARGS=(
   -O3
   -s WASM=1
   -s ERROR_ON_UNDEFINED_SYMBOLS=0
-  -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap"]'
   -s FORCE_FILESYSTEM=1
   -s ASSERTIONS=1
+  -s FETCH=1
+  -s ALLOW_MEMORY_GROWTH=1
+  -s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap", "FS"]'
+  -fno-rtti -fno-exceptions
   -I. -I../libpcap-1.9.1
   -L../libpcap-1.9.1
   -o ../wasm/dist/rtptool.js aes.c analyze.c base64.c extract.c file.c hex.c srtpdecryptwasm.c usage-and-help.c -lpcap
