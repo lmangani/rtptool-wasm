@@ -21,18 +21,72 @@
 #include "emscripten.h"
 #include <string.h>
 #include "analyze.h"
-#include "decrypt.h"
 #include "extract.h"
 #include "usage-and-help.h"
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <emscripten.h>
+#include <pcap/pcap.h>
+#include "hex.h"
 
 /* Wasm exports */
+
 EMSCRIPTEN_KEEPALIVE
-int add(int a, int b) {
-  return a + b;
+void version() {
+  printf("WASM\n");
 }
+
+EMSCRIPTEN_KEEPALIVE
+int analyze_pcap(const char *filename) {
+  MAIN_THREAD_EM_ASM({
+     var filename = UTF8ToString($0);
+     console.log('trying to analyze '+filename);
+     var read = FS.readFile(filename, { encoding: 'utf8' });
+     console.log('read', read.length);
+  }, filename);
+  int r;
+  r = analyze( filename );
+  return r;
+}
+
+EMSCRIPTEN_KEEPALIVE
+int extract_pcap(const char *ssrc, const char *filename) {
+  MAIN_THREAD_EM_ASM({
+     var filename = UTF8ToString($1);
+     var ssrc = UTF8ToString($0);
+     console.log('trying to extract '+filename);
+     var read = FS.readFile(filename, { encoding: 'utf8' });
+     console.log('read', read.length);
+  }, ssrc, filename);
+  int r;
+  r = extract( ssrc, filename );
+  MAIN_THREAD_EM_ASM({
+     var filename = UTF8ToString($0)+".wav";
+     var ssrc = UTF8ToString($0);
+     console.log('trying to read back '+filename);
+     var read = FS.readFile(filename, { encoding: 'utf8' });
+     console.log('read wav', read.length);
+  }, ssrc, filename);
+
+  return r;
+/*
+  MAIN_THREAD_EM_ASM({
+     var filename = 'rtp.raw';
+     console.log('trying to save '+filename);
+     var write = FS.writeFile(filename, r);
+  }, filename);
+*/
+}
+
+/*
+EMSCRIPTEN_KEEPALIVE
+int decrypt_pcap(char **ssrc, char **key, char **filename) {
+  int r;
+  r = decrypt( ssrc, key, filename, 1, 10 );
+  return r;
+}
+*/
 
 EMSCRIPTEN_KEEPALIVE
 uint8_t* create_buffer(int width, int height) {
@@ -45,28 +99,37 @@ void destroy_buffer(uint8_t* p) {
 }
 
 
+void emscripten_wget_data(const char* url, void** pbuffer, int* pnum, int *perror);
+
+
+int main() {
+  EM_ASM(
+        // Make a directory other than '/'
+        FS.mkdir('/pcap');
+        // Then mount with IDBFS type
+        FS.mount(MEMFS, {}, '/pcap');
+        FS.syncfs(true, function (err) {
+            // Error
+        });
+  );
+
+  emscripten_exit_with_live_runtime();
+  return 0;
+}
+
+
 /* original functions */
 
+/*
 int main(int argc, char **argv)
 {
-/* process arguments */
 
 if(argc == 1){
 
 	usage( argv[0] );
     return -1;
 }
-if(strcmp( argv[1], "analyze") && strcmp( argv[1], "decrypt") && strcmp( argv[1], "extract") && strcmp( argv[1], "help")){
-
-	usage( argv[0] );
-    return -1;
-}
 if(!strcmp(argv[1], "help" ) && argc < 3){
-
-	usage( argv[0] );
-    return -1;
-}
-if(!strcmp(argv[1], "help" ) && strcmp( argv[2], "analyze") && strcmp( argv[2], "decrypt") && strcmp( argv[2], "info")){
 
 	usage( argv[0] );
     return -1;
@@ -86,16 +149,6 @@ if(!strcmp(argv[1], "analyze" ))
 	r = analyze( argv[2] );
 	return r;
 }
-if(!strcmp(argv[1], "decrypt" ))
-{
-	int r;
-	if ( argc < 5 ) {
-		usage ( argv[0] );
-		return -1;
-	}
-	r = decrypt( argv[2], argv[3], argv[4], 1, 10 ); /* MKI = 1, MAC length = 10 by default */
-	return r;
-}
 if(!strcmp(argv[1], "extract" ))
 {
 	int r;
@@ -106,6 +159,6 @@ if(!strcmp(argv[1], "extract" ))
 	r = extract( argv[2], argv[3] );
 	return r;
 }
-    
 return 0;
 }
+*/
