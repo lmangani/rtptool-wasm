@@ -1,6 +1,7 @@
 const message = document.getElementById("message");
 
 var rtptool, api;
+var cache;
 
 const load_pcap = async ({ target: { files } }) => {
   try {
@@ -25,6 +26,7 @@ const load_pcap = async ({ target: { files } }) => {
           rtptool.FS.readFile("report.json", { encoding: "utf8" })
         );
         console.log("RTP LEGS", report);
+        cache = report;
         var ssrcs = document.getElementById("ssrcs");
         ssrcs.innerHTML =
           '<option value="" selected="selected">Select a Stream</option>';
@@ -72,7 +74,7 @@ const extract_pcap = async ({ target: { files } }) => {
       audio.addEventListener("ended", function(e){
         message.innerHTML = "";
       }, false);
-      message.innerHTML = "Playing "+ssrc;
+      message.innerHTML = cache[ssrc];
     } catch (e) {
       console.log(e);
     }
