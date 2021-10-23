@@ -28,7 +28,7 @@ const Module = require("./rtptool.js");
 		var contents = Module.FS.readFile('tmp.pcap');
 		console.log(api.analyze('tmp.pcap'));
 		var json = Module.FS.readFile('report.json', {encoding: 'utf8'});
-		console.log(JSON.parse(JSON.stringify(json)));
+		console.log(JSON.parse(json));
         });
     // Node
     } else {
@@ -38,7 +38,8 @@ const Module = require("./rtptool.js");
 		var contents = Module.FS.readFile('tmp.pcap');
 		console.log(api.analyze('tmp.pcap'));
 		var json = Module.FS.readFile('report.json', {encoding: 'utf8'});
-		console.log(JSON.parse(JSON.stringify(json)));
+		json = JSON.parse(json);
+		console.log(json);
     }
 
 

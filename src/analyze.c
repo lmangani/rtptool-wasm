@@ -138,7 +138,7 @@ if( RTP_Streams == 0 ) {
 
 printf("\n");
 
-char* final = "[";
+char* final = "{";
 
 Current_RTP_Stream = RTP_Streams;
 while ( !( Current_RTP_Stream == 0 ) ) {
@@ -147,7 +147,8 @@ while ( !( Current_RTP_Stream == 0 ) ) {
 		continue;
 	}
 	char* json;
-        asprintf(&json, "{'ssrc': '0x%.2x%.2x%.2x%.2x', 'pt': %d, 'source_ip': '%d.%d.%d.%d', 'source_port': %d, 'dest_ip': '%d.%d.%d.%d', 'dest_port': %d, 'packets': %d },",
+        asprintf(&json, "\"0x%.2x%.2x%.2x%.2x\": { \"ssrc\": \"0x%.2x%.2x%.2x%.2x\", \"pt\": %d, \"source_ip\": \"%d.%d.%d.%d\", \"source_port\": %d, \"dest_ip\": \"%d.%d.%d.%d\", \"dest_port\": %d, \"packets\": %d },",
+		Current_RTP_Stream->ssrc[ 0 ], Current_RTP_Stream->ssrc[ 1 ], Current_RTP_Stream->ssrc[ 2 ], Current_RTP_Stream->ssrc[ 3 ],
 		Current_RTP_Stream->ssrc[ 0 ], Current_RTP_Stream->ssrc[ 1 ], Current_RTP_Stream->ssrc[ 2 ], Current_RTP_Stream->ssrc[ 3 ],
 		Current_RTP_Stream->pt[ 0 ],
 		Current_RTP_Stream->sip[ 0 ], Current_RTP_Stream->sip[ 1 ], Current_RTP_Stream->sip[ 2 ], Current_RTP_Stream->sip[ 3 ],
@@ -165,7 +166,7 @@ while ( !( Current_RTP_Stream == 0 ) ) {
 if (final != NULL)
 {
     final[strlen(final) - 1] = '\0';
-    asprintf(&final, "%s]",final);
+    asprintf(&final, "%s}",final);
     write_memory_to_file( "report.json", final, strlen(final) );
     free(final);
 }
