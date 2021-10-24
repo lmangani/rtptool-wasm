@@ -70,8 +70,11 @@ const Module = require("./rtptool.js");
     } else {
 	var reader = require('fs');
         var raw_data = reader.readFileSync(filename);
+		console.log('writing tmp.pcap');
 		Module.FS.writeFile('tmp.pcap', raw_data);
+		console.log('extracting ssrc', ssrc);
 		console.log(api.extract(ssrc, 'tmp.pcap'));
+		console.log('reading back', ssrc);
 		var content = Module.FS.readFile(ssrc+'.wav');
 		console.log('wav', content);
     }

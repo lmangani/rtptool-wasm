@@ -143,6 +143,12 @@ while( ( ( res = pcap_next_ex( fp, &header, &pkt_data ) ) >= 0 ) && !first_packe
 			memcpy( ( void * ) wav_file_content, ( void * ) silkbin_file_skeleton_header, wav_file_size );
 		}
 
+		/* If Unsopported RTP Payload Type, use Raw file */
+		else {
+			wav_file_size = 0; 
+			wav_file_content = malloc( wav_file_size );
+		}
+
 		// COUNT FRAMES!!!
 		// printf( "*");
 
@@ -244,27 +250,35 @@ if ( wav_file_size > 0 )
 		strcpy( wav_file_name, input_ssrc );	
 		strcat( wav_file_name, ".g722" );
 		write_memory_to_file( wav_file_name, wav_file_content, wav_file_size );
-		printf("\nRun the following command:\n\n");
-		printf("ffmpeg.exe -i %s out.wav\n", wav_file_name);
+		//printf("\nRun the following command:\n\n");
+		//printf("ffmpeg.exe -i %s out.wav\n", wav_file_name);
 	}
 	if ( rtp_pt_found == 103 ) {
 		strcpy( wav_file_name, input_ssrc );	
 		strcat( wav_file_name, "-SILK8000.bin" );
 		write_memory_to_file( wav_file_name, wav_file_content, wav_file_size );
-		printf("\nRun the following commands:\n\n");
-		printf("decoder.exe %s help.pcm -Fs_API 8000\n", wav_file_name);
-		printf("ffmpeg.exe -f s16le -ar 8000 -i help.pcm out.wav\n");
+		//printf("\nRun the following commands:\n\n");
+		//printf("decoder.exe %s help.pcm -Fs_API 8000\n", wav_file_name);
+		//printf("ffmpeg.exe -f s16le -ar 8000 -i help.pcm out.wav\n");
 	}
 	if ( rtp_pt_found == 104 ) {
 		strcpy( wav_file_name, input_ssrc );	
 		strcat( wav_file_name, "-SILK16000.bin" );
 		write_memory_to_file( wav_file_name, wav_file_content, wav_file_size );
-		printf("\nRun the following commands:\n\n");
-		printf("decoder.exe %s help.pcm -Fs_API 16000\n", wav_file_name);
-		printf("ffmpeg.exe -f s16le -ar 16000 -i help.pcm out.wav\n");
+		//printf("\nRun the following commands:\n\n");
+		//printf("decoder.exe %s help.pcm -Fs_API 16000\n", wav_file_name);
+		//printf("ffmpeg.exe -f s16le -ar 16000 -i help.pcm out.wav\n");
 	}
+
+	else {
+		strcpy( wav_file_name, input_ssrc );
+		strcat( wav_file_name, ".null");
+		//strcat( wav_file_name, rtp_pt_found );
+		write_memory_to_file( wav_file_name, wav_file_content, wav_file_size );
+		printf("use external decoder for pt %d", rtp_pt_found);
+	}
+
 }
 
-printf( "\n");
 return 0;
 }

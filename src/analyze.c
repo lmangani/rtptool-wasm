@@ -55,6 +55,45 @@ struct RTP_Stream_Data *Current_RTP_Stream;
 struct RTP_Stream_Data *New_RTP_Stream;
 
 
+typedef char CODECDATA[8];
+CODECDATA CodecTable[50] = {
+		 	  "pcmu",  // 0
+                          "null",  // 1
+			  "null",  // 2
+			  "gsm",   // 3
+			  "g723",  // 4
+			  "dvi4",  // 5
+			  "dvi4",  // 6
+			  "lpc",   // 7
+			  "pcma",  // 8
+			  "g722",  // 9
+			  "l16",   // 10
+			  "l16",   // 11
+			  "qcelp", // 12
+			  "null",
+			  "null",
+			  "g728",  // 15
+			  "null",
+			  "null",
+			  "g729",  // 18
+			  "null",
+			  "null",
+			  "null",
+			  "null",
+			  "null",
+			  "null",
+			  "null",
+			  "jpg",   //26
+			  "null",
+			  "null",
+			  "null",
+			  "null",
+			  "h261",  // 31
+			  "null",
+			  "null",
+			  "h263",
+                        };
+
 /* Open the capture file */
 if ( (fp = pcap_open_offline(filename, errbuf) ) == NULL) {
 	fprintf(stderr,"\nPCAP: Unable to open %s\nError: %s\n", filename, errbuf);
@@ -67,7 +106,7 @@ RTP_Streams = 0;
 while((res = pcap_next_ex( fp, &header, &pkt_data)) >= 0)
 {
 	frame_number = frame_number + 1;
-	
+
 	/* IP Packet denoted by 0x0800 at respective offset in Ethernet header; UDP denoted by 0x11 at respective offset in IP header */
 	if( pkt_data[ 12 ] == 0x08 && pkt_data[ 13 ] == 0x00 && pkt_data[ 23 ] == 0x11 ) {
 
@@ -96,7 +135,7 @@ while((res = pcap_next_ex( fp, &header, &pkt_data)) >= 0)
 			if( Current_RTP_Stream == 0) { /* No, we don't know it. */
 
 				New_RTP_Stream = (struct RTP_Stream_Data *) malloc( sizeof( struct RTP_Stream_Data) );
-				
+
 				New_RTP_Stream->ssrc[ 0 ] = pkt_data[ rtp_offset + 8 ];
 				New_RTP_Stream->ssrc[ 1 ] = pkt_data[ rtp_offset + 9 ];
 				New_RTP_Stream->ssrc[ 2 ] = pkt_data[ rtp_offset + 10 ];
@@ -147,10 +186,11 @@ while ( !( Current_RTP_Stream == 0 ) ) {
 		continue;
 	}
 	char* json;
-        asprintf(&json, "\"0x%.2x%.2x%.2x%.2x\": { \"ssrc\": \"0x%.2x%.2x%.2x%.2x\", \"pt\": %d, \"source_ip\": \"%d.%d.%d.%d\", \"source_port\": %d, \"dest_ip\": \"%d.%d.%d.%d\", \"dest_port\": %d, \"packets\": %d },",
+        asprintf(&json, "\"0x%.2x%.2x%.2x%.2x\": { \"ssrc\": \"0x%.2x%.2x%.2x%.2x\", \"pt\": %d, \"codec\": \"%s\", \"source_ip\": \"%d.%d.%d.%d\", \"source_port\": %d, \"dest_ip\": \"%d.%d.%d.%d\", \"dest_port\": %d, \"packets\": %d },",
 		Current_RTP_Stream->ssrc[ 0 ], Current_RTP_Stream->ssrc[ 1 ], Current_RTP_Stream->ssrc[ 2 ], Current_RTP_Stream->ssrc[ 3 ],
 		Current_RTP_Stream->ssrc[ 0 ], Current_RTP_Stream->ssrc[ 1 ], Current_RTP_Stream->ssrc[ 2 ], Current_RTP_Stream->ssrc[ 3 ],
 		Current_RTP_Stream->pt[ 0 ],
+		CodecTable[Current_RTP_Stream->pt[ 0 ]],
 		Current_RTP_Stream->sip[ 0 ], Current_RTP_Stream->sip[ 1 ], Current_RTP_Stream->sip[ 2 ], Current_RTP_Stream->sip[ 3 ],
 		(((int)Current_RTP_Stream->sport[ 0 ]) << 8) + (int)Current_RTP_Stream->sport[ 1 ],
 		Current_RTP_Stream->dip[ 0 ], Current_RTP_Stream->dip[ 1 ], Current_RTP_Stream->dip[ 2 ], Current_RTP_Stream->dip[ 3 ],
