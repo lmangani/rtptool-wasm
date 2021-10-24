@@ -7,7 +7,10 @@
 Extract RTP and Decrypt SRTP Audio streams from .PCAP files in the browser using WASM
 
 ### Status
-* WASM code is working, but experimental
+- [x] WASM code is working, but experimental!
+- [x] PCAP-> RTP-> SSRC Extraction 
+- [x] PCMA/PCMU native decoder
+- [ ] Raw decoding with FFMPEG-WASM
 
 ### Build Native
 ###### x86_64
