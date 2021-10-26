@@ -22,7 +22,20 @@ Extract RTP and Decrypt SRTP Audio streams from .PCAP files in the browser using
 
 -------------------
 ### WASM Module Usage
-Check out the included [example](wasm/dist/api.js) for API usage
+Check out the included [example](wasm/dist/api.js) for API usage.
+```
+npm run test
+```
+
+In a nutshell:
+```javascript
+  // Write or fetch binary PCAP data from JS to the virtual FS
+  Module.FS.writeFile('tmp.pcap', raw_pcap_data);
+  // Analyze the virtual PCAP file in wasm
+  Module.api.analyze('tmp.pcap', 'report.json');
+  // Read the analysis output back into JS
+  Module.FS.readFile('report.json', {encoding: 'utf8'});
+```
 
 ```
 npm run test
